@@ -1,32 +1,30 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import { router } from 'expo-router';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { DashboardProps } from '../types/navigation';
 
-export default function Dashboard() {
+export default function Dashboard({ route, navigation }: DashboardProps) {
+  // Recuperando os parâmetros
+  const { userName } = route.params;
+
   const handleLogout = () => {
-    router.replace('/telas/LoginTelas');
+    // Pensamento Crítico: Reset para impedir de voltar com o botão "back"
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image
-          style={styles.logo}
-          source={require('../../assets/images/ONGconnect-logo.png')}
-        />
+        <Image style={styles.logo} source={require('../../assets/images/ONGconnect-logo.png')} />
       </View>
 
       <View style={styles.content}>
         <Text style={styles.title}>Dashboard</Text>
-        <Text style={styles.subtitle}>Bem-vindo ao ONG Connect!</Text>
-        <Text style={styles.description}>
-          Aqui você pode acessar todos os projetos e oportunidades de voluntariado.
+        {/* Exibição personalizada */}
+        <Text style={styles.subtitle}>
+          Olá, {userName}, que bom ter você aqui para ajudar!
         </Text>
       </View>
 
@@ -96,3 +94,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+

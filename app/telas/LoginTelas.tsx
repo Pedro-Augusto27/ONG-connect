@@ -1,72 +1,56 @@
 import React, { useState } from 'react';
-import { router } from 'expo-router';
 import {
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
+import { LoginProps } from '../types/navigation';
 
-export default function LoginTelas() {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+export default function LoginTelas({ navigation }: LoginProps) {
+  const [nome, setNome] = useState('');
 
   const handleLogin = () => {
-    console.table({ email, senha });
-
-    if (email.includes('@') && senha.length > 6) {
-      console.log('✅ Acesso autorizado para:', email);
-      router.push('/telas/dashboard');
-    } else {
-      console.log('❌ Falha no login: Verifique os critérios de validação.');
+    if (nome.trim() === '') {
+      Alert.alert('Erro', 'Por favor, digite seu nome de voluntário.');
+      return;
     }
+
+    // Gerando ID aleatório e navegando
+    const idAleatorio = Math.floor(Math.random() * 1000);
+    
+    // Habilidade S: Usando navigation.navigate com parâmetros
+    navigation.navigate('Dashboard', {
+      userName: nome,
+      voluntarioId: idAleatorio
+    });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Image
-          style={styles.logo}
-          source={require('../../assets/images/ONGconnect-logo.png')}
-        />
+        <Image style={styles.logo} source={require('../../assets/images/ONGconnect-logo.png')} />
+        
+        <Text style={styles.title}>Seja bem-vindo ao ONG Connect!</Text>
+        <Text style={styles.subtitle}>Conectando solidariedade e necessidade.</Text>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.title}>Seja bem-vindo ao ONG Connect!</Text>
-        <Text style={styles.subtitle}>Conectando solidariedade e necessidade.</Text>
-
+        <Text style={styles.title}>Seja bem-vindo!</Text>
         <TextInput
           style={styles.input}
-          placeholder="Digite seu e-mail"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Digite seu nome de voluntário"
+          value={nome}
+          onChangeText={setNome}
         />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Digite sua senha"
-          secureTextEntry={true}
-          value={senha}
-          onChangeText={setSenha}
-        />
-
-        <Text style={styles.helperText}>
-          Logando como: {email || '...'}
-        </Text>
       </View>
 
       <View style={styles.bottom}>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.secondaryButton}>
-          <Text style={styles.secondaryButtonText}>Conhecer Projetos</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -82,21 +66,26 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     justifyContent: 'space-between',
   },
+
   top: {
     alignItems: 'center',
   },
+
   form: {
     flex: 1,
     justifyContent: 'center',
   },
+
   bottom: {
     gap: 12,
   },
+
   logo: {
     width: 170,
     height: 170,
     resizeMode: 'contain',
   },
+
   title: {
     fontSize: 24,
     fontWeight: '700',
@@ -104,6 +93,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
   },
+
   subtitle: {
     fontSize: 16,
     fontWeight: '500',
@@ -111,6 +101,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
+
   input: {
     width: '100%',
     backgroundColor: '#fff',
@@ -122,23 +113,27 @@ const styles = StyleSheet.create({
     borderColor: '#cfe8ff',
     fontSize: 16,
   },
+
   helperText: {
     marginTop: 2,
     marginBottom: 8,
     color: '#0b2233',
     fontSize: 13,
   },
+
   button: {
     backgroundColor: '#005eff',
     paddingVertical: 13,
     borderRadius: 14,
     alignItems: 'center',
   },
+
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
   },
+
   secondaryButton: {
     backgroundColor: '#ffffffaa',
     paddingVertical: 13,
@@ -147,9 +142,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#8bbfff',
   },
+
   secondaryButtonText: {
     color: '#003b8f',
     fontSize: 15,
     fontWeight: '600',
   },
 });
+
